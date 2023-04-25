@@ -11,7 +11,7 @@ def lambda_handler(event, context):
     print(event)
     for i in event['Records']:
         if i['eventName'] == 'INSERT':
-            location_id = i['dynamodb']['NewImage']['locationId']['S']
+            location_id = i['dynamodb']['NewImage']['location_id']['S']
             name = i['dynamodb']['NewImage']['name']['S']
             line1 = i['dynamodb']['NewImage']['line1']['S']
             line2 = i['dynamodb']['NewImage']['line2']['S']
@@ -47,7 +47,7 @@ def lambda_handler(event, context):
 
 
         elif i['eventName']=='REMOVE':
-            location_id = i['dynamodb']['OldImage']['locationId']['S']
+            location_id = i['dynamodb']['OldImage']['location_id']['S']
             print("Deleting the location ID : {}".format(location_id))
             index.delete_objects([location_id])
 
