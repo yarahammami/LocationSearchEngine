@@ -24,20 +24,20 @@ def lambda_handler(event, context):
             print("Complete Address : {}".format(complete_address))
 
             record = {"objectId": location_id,
-                     "name": name,
-                     "line1": line1,
-                     "line2": line2,
-                     "city": city,
-                     "state": state,
-                     "country": country,
-                     "zipCode": zipCode}
+                      "name": name,
+                      "line1": line1,
+                      "line2": line2,
+                      "city": city,
+                      "state": state,
+                      "country": country,
+                      "zipCode": zipCode}
 
             response = client.search_place_index_for_text(IndexName='place_index1',
-                                                      FilterCountries=["LB"],
-                                                      MaxResults=1,
-                                                      Text=complete_address)
-            location_response = response['Results'][0]['Place']['Geomtry']['Point']
-            record['_geoloc']={
+                                                          FilterCountries=["LB"],
+                                                          MaxResults=1,
+                                                          Text=complete_address)
+            location_response = response['Results'][0]['Place']['Geometry']['Point']
+            record['_geoloc'] = {
                 "lat": location_response[1],
                 "lng": location_response[0]
             }
@@ -46,7 +46,7 @@ def lambda_handler(event, context):
             index.save_object(record).wait()
 
 
-        elif i['eventName'] == 'REMOVE':
+        elif i['eventName']=='REMOVE':
             location_id = i['dynamodb']['OldImage']['locationId']['S']
             print("Deleting the location ID : {}".format(location_id))
             index.delete_objects([location_id])
